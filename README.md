@@ -1,4 +1,5 @@
-[Docker Setting]
+[Docker Setting]  
+  
 docker run --name [CONTAINER_NAME] \
 -e MYSQL_ROOT_PASSWORD=[ROOT_PASSWORD] \
 -e MYSQL_DATABASE=[DB_NAME] \
