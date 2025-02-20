@@ -1,0 +1,8 @@
+[Docker Setting]
+docker run --name [CONTAINER_NAME] \
+-e MYSQL_ROOT_PASSWORD=[ROOT_PASSWORD] \
+-e MYSQL_DATABASE=[DB_NAME] \
+-e MYSQL_USER=[USER_NAME] \
+-e MYSQL_PASSWORD=[USER_PASSWORD] \
+-p 3306:3306 \
+-d mysql:latest
