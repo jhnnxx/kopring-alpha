@@ -8,16 +8,19 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 class SecurityConfig {
-
     @Bean
     fun passwordEncoder(): BCryptPasswordEncoder = BCryptPasswordEncoder()
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.csrf { csrf -> csrf.disable() }
+        http
+            .csrf { csrf -> csrf.disable() }
             .authorizeHttpRequests { auth ->
-                auth.requestMatchers("api/auth/**").permitAll()
-                    .anyRequest().authenticated()
+                auth
+                    .requestMatchers("api/auth/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
             }
         return http.build()
     }

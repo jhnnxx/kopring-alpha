@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service
 class AuthService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
 ) {
-
-    fun register(username: String, email: String, password: String): User {
+    fun register(
+        username: String,
+        email: String,
+        password: String,
+    ): User {
         if (userRepository.existsByEmail(email)) {
             throw IllegalArgumentException("Email already in use")
         }
@@ -21,7 +24,10 @@ class AuthService(
         return userRepository.save(User(username = username, email = email, password = encodedPassword))
     }
 
-    fun login(email: String, password: String): String {
+    fun login(
+        email: String,
+        password: String,
+    ): String {
         val user = userRepository.findByEmail(email) ?: throw IllegalArgumentException("User not found")
         if (!passwordEncoder.matches(password, user.password)) {
             throw IllegalArgumentException("Invalid credentials")
