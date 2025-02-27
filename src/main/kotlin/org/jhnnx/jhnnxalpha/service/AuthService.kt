@@ -4,6 +4,7 @@ package org.jhnnx.jhnnxalpha.service
 
 import org.jhnnx.jhnnxalpha.entity.Role
 import org.jhnnx.jhnnxalpha.entity.User
+import org.jhnnx.jhnnxalpha.model.AuthModel
 import org.jhnnx.jhnnxalpha.repository.UserRepository
 import org.jhnnx.jhnnxalpha.security.JwtTokenProvider
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -81,11 +82,21 @@ class AuthService(
     fun signIn(
         email: String,
         password: String,
-    ): String {
+    ): Pair<AuthModel.UserInfo, String> {
         val user = userRepository.findByEmail(email) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다.")
         if (!passwordEncoder.matches(password, user.password)) {
             throw IllegalArgumentException("비밀번호를 확인해 주세요.")
         }
-        return jwtTokenProvider.generateToken(user)
+
+        val token = jwtTokenProvider.generateToken(user)
+        val userInfo =
+            AuthModel.UserInfo(
+                id = user.id,
+                username = user.username,
+                email = user.email,
+                profileImageUrl = user.profileImageUrl,
+                role = user.role,
+            )
+        return Pair(userInfo, token)
     }
 }

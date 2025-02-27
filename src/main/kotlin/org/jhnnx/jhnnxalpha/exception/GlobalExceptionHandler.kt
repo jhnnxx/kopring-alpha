@@ -23,6 +23,7 @@ class GlobalExceptionHandler {
 
         val errorResponse =
             mutableMapOf<String, Any>(
+                "success" to false,
                 "timestamp" to LocalDateTime.now().toString(),
                 "status" to HttpServletResponse.SC_BAD_REQUEST,
                 "error" to "Bad Request",
@@ -54,6 +55,7 @@ class GlobalExceptionHandler {
 
         val errorResponse =
             mapOf(
+                "success" to false,
                 "timestamp" to LocalDateTime.now().toString(),
                 "status" to HttpServletResponse.SC_BAD_REQUEST,
                 "error" to "Bad Request",
@@ -76,6 +78,7 @@ class GlobalExceptionHandler {
 
         val errorResponse =
             mapOf(
+                "success" to false,
                 "timestamp" to LocalDateTime.now().toString(),
                 "status" to HttpServletResponse.SC_NOT_FOUND,
                 "error" to "Not Found",
@@ -98,6 +101,7 @@ class GlobalExceptionHandler {
 
         val errorResponse =
             mapOf(
+                "success" to false,
                 "timestamp" to LocalDateTime.now().toString(),
                 "status" to HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 "error" to "Internal Server Error",

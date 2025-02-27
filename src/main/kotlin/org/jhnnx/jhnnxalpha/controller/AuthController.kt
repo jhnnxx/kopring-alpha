@@ -1,7 +1,9 @@
 package org.jhnnx.jhnnxalpha.controller
 
+import org.jhnnx.jhnnxalpha.dto.AuthDto
 import org.jhnnx.jhnnxalpha.dto.CommonDto
-import org.jhnnx.jhnnxalpha.request.AuthRequest
+import org.jhnnx.jhnnxalpha.model.AuthModel
+import org.jhnnx.jhnnxalpha.repository.UserRepository
 import org.jhnnx.jhnnxalpha.service.AuthService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -13,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/auth")
 class AuthController(
     private val authService: AuthService,
+    private val userRepository: UserRepository,
 ) {
     @PostMapping("/sign-up")
     fun signUp(
-        @RequestBody request: AuthRequest.SignUp,
+        @RequestBody request: AuthModel.SignUpRequest,
     ): ResponseEntity<CommonDto.ApiResponse<String>> =
         try {
             authService.signUp(request.email)
@@ -38,7 +41,7 @@ class AuthController(
 
     @PostMapping("/verify-email")
     fun verifyEmail(
-        @RequestBody request: AuthRequest.VerifyEmail,
+        @RequestBody request: AuthModel.VerifyEmailRequest,
     ): ResponseEntity<CommonDto.ApiResponse<String>> =
         try {
             authService.verifyEmail(request.token)
@@ -51,7 +54,7 @@ class AuthController(
 
     @PostMapping("/set-password")
     fun setPassword(
-        @RequestBody request: AuthRequest.SetPassword,
+        @RequestBody request: AuthModel.SetPasswordRequest,
     ): ResponseEntity<CommonDto.ApiResponse<String>> =
         try {
             authService.setPassword(request.email, request.password)
@@ -64,16 +67,20 @@ class AuthController(
 
     @PostMapping("/sign-in")
     fun signIn(
-        @RequestBody request: AuthRequest.Login,
-    ): ResponseEntity<CommonDto.ApiResponse<String>> =
+        @RequestBody request: AuthModel.LoginRequest,
+    ): ResponseEntity<CommonDto.ApiResponse<AuthDto.LoginResponse>> =
         try {
-            val token = authService.signIn(request.email, request.password)
+            val (userInfo, token) = authService.signIn(request.email, request.password)
 
             ResponseEntity.ok(
                 CommonDto.ApiResponse(
                     success = true,
                     message = "로그인에 성공했습니다.",
-                    data = token,
+                    data =
+                        AuthDto.LoginResponse(
+                            userInfo = userInfo,
+                            token = token,
+                        ),
                 ),
             )
         } catch (e: Exception) {

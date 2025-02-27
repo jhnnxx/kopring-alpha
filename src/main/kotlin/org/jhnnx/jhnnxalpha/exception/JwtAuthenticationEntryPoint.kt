@@ -21,6 +21,7 @@ class JwtAuthenticationEntryPoint : AuthenticationEntryPoint {
 
         val errorResponse =
             mapOf(
+                "success" to false,
                 "timestamp" to LocalDateTime.now().toString(),
                 "status" to 401,
                 "error" to "Unauthorized",
